@@ -1,0 +1,23 @@
+query PostDetails ($id:ID!) {
+    post(id: $id) {
+        name
+        slug
+        tagline
+        description
+        votesCount
+        user { # hunter
+            id
+            username
+        }
+        makers {
+            id
+            name
+            username
+        }
+        media { # TODO only images not video
+            type
+            url
+            videoUrl
+        }
+    }
+}

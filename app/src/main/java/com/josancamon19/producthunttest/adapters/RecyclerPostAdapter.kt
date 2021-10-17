@@ -1,5 +1,6 @@
 package com.josancamon19.producthunttest.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -48,11 +49,12 @@ class RecyclerPostAdapter(private val onPostClick: OnPostClick) :
     ) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(data: HomePostsQuery.Edge) {
             val post = data.node
             itemBinding.tvTitle.text = post.name
-            itemBinding.tvDescription.text = post.description
-            itemBinding.tvHunter.text = post.user.username
+            itemBinding.tvTagline.text = post.tagline
+            itemBinding.tvHunter.text = "@${post.user.username}"
             itemBinding.tvVoteCount.text = "${post.votesCount}"
 
             Glide.with(itemBinding.root)

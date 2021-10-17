@@ -4,7 +4,10 @@ query HomePosts{
             node {
                 id
                 name
+                slug
+                tagline
                 description
+                votesCount
                 user {
                     username
                 }
@@ -13,7 +16,6 @@ query HomePosts{
                     url
                     videoUrl
                 }
-                votesCount
             }
         }
     }

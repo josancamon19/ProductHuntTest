@@ -23,10 +23,8 @@
             android:id="@+id/action_detailFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <argument
-            android:name="post"
-            app:argType="com.josancamon19.producthunttest.models.Post"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            android:name="postId"
+            app:argType="string" />
 
     </fragment>
     <fragment

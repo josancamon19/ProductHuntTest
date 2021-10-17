@@ -11,11 +11,8 @@ import com.apollographql.apollo.coroutines.await
 import com.josancamon19.producthunttest.HomePostsQuery
 import com.josancamon19.producthunttest.adapters.RecyclerPostAdapter
 import com.josancamon19.producthunttest.databinding.FragmentHomeBinding
-import com.josancamon19.producthunttest.models.Media
-import com.josancamon19.producthunttest.models.Post
 import com.josancamon19.producthunttest.network.apolloClient
 import timber.log.Timber
-import java.util.*
 
 class HomeFragment : Fragment(), RecyclerPostAdapter.OnPostClick {
     private lateinit var binding: FragmentHomeBinding
@@ -43,7 +40,7 @@ class HomeFragment : Fragment(), RecyclerPostAdapter.OnPostClick {
     }
 
     override fun setOnParamClick(post: HomePostsQuery.Node) {
-//        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(post)
-//        Navigation.findNavController(binding.root).navigate(action)
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(post.id)
+        Navigation.findNavController(binding.root).navigate(action)
     }
 }
