@@ -1,6 +1,5 @@
 package com.josancamon19.producthunttest.network
 
-import android.content.Context
 import com.apollographql.apollo.ApolloClient
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -8,7 +7,7 @@ import okhttp3.Response
 
 private var instance: ApolloClient? = null
 
-fun apolloClient(context: Context): ApolloClient {
+fun apolloClient(): ApolloClient {
     if (instance != null) {
         return instance!!
     }

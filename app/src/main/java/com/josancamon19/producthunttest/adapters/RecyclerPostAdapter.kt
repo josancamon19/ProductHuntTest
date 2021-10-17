@@ -6,25 +6,31 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.josancamon19.producthunttest.HomePostsQuery
 import com.josancamon19.producthunttest.R
 import com.josancamon19.producthunttest.databinding.ListItemPostBinding
-import com.josancamon19.producthunttest.models.Post
 
-class DiffUtilPost : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-        return oldItem.id == newItem.id
+class DiffUtilPost : DiffUtil.ItemCallback<HomePostsQuery.Edge>() {
+    override fun areItemsTheSame(
+        oldItem: HomePostsQuery.Edge,
+        newItem: HomePostsQuery.Edge
+    ): Boolean {
+        return oldItem.node.id == newItem.node.id
     }
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+    override fun areContentsTheSame(
+        oldItem: HomePostsQuery.Edge,
+        newItem: HomePostsQuery.Edge
+    ): Boolean {
         return oldItem == newItem
     }
 }
 
 class RecyclerPostAdapter(private val onPostClick: OnPostClick) :
-    ListAdapter<Post, RecyclerPostAdapter.ParameterViewHolder>(DiffUtilPost()) {
+    ListAdapter<HomePostsQuery.Edge, RecyclerPostAdapter.ParameterViewHolder>(DiffUtilPost()) {
 
     interface OnPostClick {
-        fun setOnParamClick(post: Post)
+        fun setOnParamClick(post: HomePostsQuery.Node)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParameterViewHolder {
@@ -42,14 +48,15 @@ class RecyclerPostAdapter(private val onPostClick: OnPostClick) :
     ) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(post: Post) {
+        fun bind(data: HomePostsQuery.Edge) {
+            val post = data.node
             itemBinding.tvTitle.text = post.name
             itemBinding.tvDescription.text = post.description
-            itemBinding.tvHunter.text = post.user?.username ?: "@josancamon19"
+            itemBinding.tvHunter.text = post.user.username
             itemBinding.tvVoteCount.text = "${post.votesCount}"
 
             Glide.with(itemBinding.root)
-                .load(post.thumbnail.url).centerCrop()
+                .load(post.thumbnail?.url).centerCrop()
                 .into(itemBinding.ivThumbnail)
 
             itemBinding.root.setOnClickListener {

@@ -8,6 +8,12 @@ query HomePosts{
                 user {
                     username
                 }
+                thumbnail {
+                    type
+                    url
+                    videoUrl
+                }
+                votesCount
             }
         }
     }

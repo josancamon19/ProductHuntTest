@@ -5,11 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import com.apollographql.apollo.coroutines.await
+import com.josancamon19.producthunttest.HomePostsQuery
 import com.josancamon19.producthunttest.adapters.RecyclerPostAdapter
 import com.josancamon19.producthunttest.databinding.FragmentHomeBinding
 import com.josancamon19.producthunttest.models.Media
 import com.josancamon19.producthunttest.models.Post
+import com.josancamon19.producthunttest.network.apolloClient
+import timber.log.Timber
 import java.util.*
 
 class HomeFragment : Fragment(), RecyclerPostAdapter.OnPostClick {
@@ -30,47 +35,15 @@ class HomeFragment : Fragment(), RecyclerPostAdapter.OnPostClick {
         postsAdapter = RecyclerPostAdapter(this)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = postsAdapter
-        fakeData()
-    }
-
-    private fun fakeData() {
-        val fake = mutableListOf<Post>()
-        for (i in 0..10) {
-            fake.add(
-                Post(
-                    20,
-                    Date(),
-                    "DeSo NFT Marketplace",
-                    Date(),
-                    "$i",
-                    true,
-                    true,
-                    listOf(),
-                    listOf(),
-                    "Polygram",
-                    listOf(),
-                    123,
-                    4.99f,
-                    "Slug",
-                    "Tagline",
-                    Media(
-                        type = "image",
-                        "https://ph-files.imgix.net/f3e37964-074f-4d99-bd1f-22f7679391cd.png",
-                        null
-                    ),
-                    "https://www.producthunt.com/posts/polygram-3",
-                    null,
-                    12,
-                    32,
-                    "website.com"
-                )
-            )
+        lifecycleScope.launchWhenResumed {
+            val response = apolloClient().query(HomePostsQuery()).await()
+            Timber.d(response.data?.posts?.edges?.toString())
+            postsAdapter.submitList(response.data?.posts?.edges)
         }
-        postsAdapter.submitList(fake)
     }
 
-    override fun setOnParamClick(post: Post) {
-        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(post)
-        Navigation.findNavController(binding.root).navigate(action)
+    override fun setOnParamClick(post: HomePostsQuery.Node) {
+//        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(post)
+//        Navigation.findNavController(binding.root).navigate(action)
     }
 }
