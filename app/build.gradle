@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
-    id 'com.apollographql.apollo'
+    id("com.apollographql.apollo").version("2.5.10")
 }
 
 android {
@@ -33,12 +33,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    viewBinding {
-        enabled = true
-    }
-    apollo {
-        // instruct the compiler to generate Kotlin models
-        generateKotlinModels.set(true)
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -66,5 +62,8 @@ dependencies {
 
     implementation("com.apollographql.apollo:apollo-runtime:$apollo_version")
     implementation("com.apollographql.apollo:apollo-coroutines-support:$apollo_version")
+}
 
+apollo {
+    generateKotlinModels.set(true)
 }

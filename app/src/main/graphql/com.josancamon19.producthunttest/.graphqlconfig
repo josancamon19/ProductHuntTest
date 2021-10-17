@@ -1,0 +1,15 @@
+{
+  "name": "Product Hunt GraphQL API",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "https://ph-graph-api-explorer.herokuapp.com/graphql",
+        "headers": {
+          "user-agent": "Android Test App GraphQL",
+          "Authorization": "Bearer Pmi_WfEQ_Ag4tNWbQtcF_qMl3mOlB3YKXuMp545JmUg"
+        }
+      }
+    }
+  }
+}

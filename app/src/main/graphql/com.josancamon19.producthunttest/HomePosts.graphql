@@ -1,0 +1,14 @@
+query HomePosts{
+    posts {
+        edges {
+            node {
+                id
+                name
+                description
+                user {
+                    username
+                }
+            }
+        }
+    }
+}
