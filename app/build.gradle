@@ -62,6 +62,7 @@ dependencies {
 
     implementation("com.apollographql.apollo:apollo-runtime:$apollo_version")
     implementation("com.apollographql.apollo:apollo-coroutines-support:$apollo_version")
+
 }
 
 apollo {

@@ -5,14 +5,17 @@ query PostDetails ($id:ID!) {
         tagline
         description
         votesCount
-        user { # hunter
+        user { # HUNTER
             id
-            username
+            name
+            headline
+            profileImage
         }
         makers {
             id
             name
-            username
+            headline
+            profileImage
         }
         thumbnail{
             type
