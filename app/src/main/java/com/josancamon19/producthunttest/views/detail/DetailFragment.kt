@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.apollographql.apollo.coroutines.await
 import com.bumptech.glide.Glide
@@ -15,6 +16,7 @@ import com.josancamon19.producthunttest.databinding.ListItemUserBinding
 import com.josancamon19.producthunttest.models.User
 import com.josancamon19.producthunttest.models.UserType
 import com.josancamon19.producthunttest.network.apolloClient
+import com.josancamon19.producthunttest.views.home.HomeFragmentDirections
 
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
@@ -74,8 +76,9 @@ class DetailFragment : Fragment() {
             item.tvUserHeadline.text = it.headline
             item.tvUserType.text = it.type.toString()
 
-            item.root.setOnClickListener {
-
+            item.root.setOnClickListener {_ ->
+                val action = DetailFragmentDirections.actionDetailFragmentToProfileFragment(it.id)
+                Navigation.findNavController(binding.root).navigate(action)
             }
 
             binding.containerUsersList.addView(item.root)

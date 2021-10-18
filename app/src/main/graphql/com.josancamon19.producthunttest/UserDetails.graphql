@@ -1,0 +1,18 @@
+query UserDetails ($id:ID!) {
+    user(id: $id) {
+        name
+        username
+        profileImage
+        votedPosts { # SCROLLABLE
+            edges {
+                node {
+                    name
+                    tagline
+                    thumbnail {
+                        url
+                    }
+                }
+            }
+        }
+    }
+}
