@@ -1,6 +1,7 @@
-query HomePosts{
-    posts {
+query HomePosts($after:String!){
+    posts(after: $after) {
         edges {
+            cursor
             node {
                 id
                 name

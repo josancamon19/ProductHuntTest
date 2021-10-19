@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import com.apollographql.apollo.coroutines.await
 import com.josancamon19.producthunttest.HomePostsQuery
-import com.josancamon19.producthunttest.adapters.RecyclerPostAdapter
+import com.josancamon19.producthunttest.adapters.PagedPostsAdapter
 import com.josancamon19.producthunttest.databinding.FragmentHomeBinding
-import com.josancamon19.producthunttest.network.apolloClient
-import timber.log.Timber
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment(), RecyclerPostAdapter.OnPostClick {
+class HomeFragment : Fragment(), PagedPostsAdapter.OnPostClick {
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var postsAdapter: RecyclerPostAdapter
+    private lateinit var postsAdapter: PagedPostsAdapter
+
+    private val viewModel by viewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,13 +31,14 @@ class HomeFragment : Fragment(), RecyclerPostAdapter.OnPostClick {
     }
 
     private fun setupRecycler() {
-        postsAdapter = RecyclerPostAdapter(this)
+        postsAdapter = PagedPostsAdapter(this)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = postsAdapter
-        lifecycleScope.launchWhenResumed {
-            val response = apolloClient().query(HomePostsQuery()).await()
-            Timber.d(response.data?.posts?.edges?.toString())
-            postsAdapter.submitList(response.data?.posts?.edges)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.flow.collectLatest { pagingData ->
+                postsAdapter.submitData(pagingData)
+            }
         }
     }
 

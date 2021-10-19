@@ -3,8 +3,8 @@ package com.josancamon19.producthunttest.adapters
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.josancamon19.producthunttest.HomePostsQuery
@@ -27,25 +27,27 @@ class DiffUtilPost : DiffUtil.ItemCallback<HomePostsQuery.Edge>() {
     }
 }
 
-class RecyclerPostAdapter(private val onPostClick: OnPostClick) :
-    ListAdapter<HomePostsQuery.Edge, RecyclerPostAdapter.ParameterViewHolder>(DiffUtilPost()) {
+class PagedPostsAdapter(private val onPostClick: OnPostClick) :
+    PagingDataAdapter<HomePostsQuery.Edge, PagedPostsAdapter.PostViewHolder>(DiffUtilPost()) {
 
     interface OnPostClick {
         fun setOnParamClick(post: HomePostsQuery.Node)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParameterViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.list_item_post, parent, false)
-        return ParameterViewHolder(ListItemPostBinding.bind(view), onPostClick)
+        return PostViewHolder(ListItemPostBinding.bind(view), onPostClick)
     }
 
-    override fun onBindViewHolder(holder: ParameterViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.bind(item!!)
     }
 
-    class ParameterViewHolder(
-        private val itemBinding: ListItemPostBinding, private val onPostClick: OnPostClick
+    class PostViewHolder(
+        private val itemBinding: ListItemPostBinding,
+        private val onPostClick: OnPostClick
     ) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
