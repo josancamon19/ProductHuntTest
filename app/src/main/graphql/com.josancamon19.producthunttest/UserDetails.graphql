@@ -1,8 +1,13 @@
 query UserDetails ($id:ID!) {
     user(id: $id) {
+        id
         name
+        headline
         username
         profileImage
+        coverImage
+        websiteUrl
+        twitterUsername
         votedPosts { # SCROLLABLE
             edges {
                 node {
