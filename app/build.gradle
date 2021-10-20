@@ -64,7 +64,11 @@ dependencies {
     implementation("com.apollographql.apollo:apollo-runtime:$apollo_version")
     implementation("com.apollographql.apollo:apollo-coroutines-support:$apollo_version")
 
-    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'me.relex:circleindicator:2.1.6'
+    implementation 'org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.0.2'
 
 }
 

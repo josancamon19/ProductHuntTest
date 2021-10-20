@@ -20,9 +20,8 @@ query PostDetails ($id:ID!) {
         thumbnail{
             type
             url
-            videoUrl
         }
-        media { # TODO only images not video
+        media  { # TODO filter clause marked as unavailable
             type
             url
             videoUrl

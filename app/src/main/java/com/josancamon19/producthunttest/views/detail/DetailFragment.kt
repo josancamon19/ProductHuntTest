@@ -17,6 +17,8 @@ import com.josancamon19.producthunttest.models.User
 import com.josancamon19.producthunttest.models.UserType
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
+import timber.log.Timber
 
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
@@ -42,9 +44,8 @@ class DetailFragment : Fragment() {
         binding.tvDetailsTagline.text = post.tagline
         binding.tvDetailsDescription.text = post.description
 
-        Glide.with(binding.root)
-            .load(post.media.firstOrNull()?.url).fitCenter()
-            .into(binding.ivDetailsMedia)
+        val data = post.media.filter { it.type == "image" }.map { CarouselItem(it.url) }
+        binding.carousel.setData(data)
 
         binding.btnGetIt.setOnClickListener { }
         binding.btnUpvote.setOnClickListener { }
@@ -59,6 +60,8 @@ class DetailFragment : Fragment() {
                 post.user.profileImage, UserType.HUNTER
             )
         )
+
+        Timber.d("Media: ${post.media.map { it.type }.toString()}")
 
         post.makers.filter { it.id != post.user.id }.forEach {
             users.add(User(it.id, it.name, it.headline, it.profileImage, UserType.MAKER))

@@ -41,8 +41,8 @@
             app:layout_constraintStart_toStartOf="@+id/ivDetailsThumbnail"
             app:layout_constraintTop_toBottomOf="@+id/tvDetailsTitle" />
 
-        <ImageView
-            android:id="@+id/ivDetailsMedia"
+        <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+            android:id="@+id/carousel"
             android:layout_width="0dp"
             android:layout_height="280dp"
             android:layout_marginStart="16dp"
@@ -51,8 +51,7 @@
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnGetIt"
-            app:srcCompat="@drawable/polygram_media" />
+            app:layout_constraintTop_toBottomOf="@+id/btnGetIt" />
 
         <TextView
             android:id="@+id/tvDetailsDescription"
@@ -64,7 +63,7 @@
             android:text="Discover, collect and sell incredible NFTs on DeSo blockchain.  Visit: https://polygram.cc"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivDetailsMedia" />
+            app:layout_constraintTop_toBottomOf="@+id/carousel" />
 
         <Button
             android:id="@+id/btnGetIt"
