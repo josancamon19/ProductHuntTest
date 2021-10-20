@@ -3,6 +3,8 @@ query UserVotedPosts($id:ID!, $after:String!) {
         votedPosts(after: $after) {
             edges {
                 cursor
+                # TODO there should be a way to standardize entities to avoid duplicates
+                #  such as here and HomePosts (that'd allow to use same adapters and pagers)
                 node {
                     id
                     name

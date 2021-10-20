@@ -18,7 +18,6 @@ import com.josancamon19.producthunttest.models.UserType
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
-import timber.log.Timber
 
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
@@ -60,8 +59,6 @@ class DetailFragment : Fragment() {
                 post.user.profileImage, UserType.HUNTER
             )
         )
-
-        Timber.d("Media: ${post.media.map { it.type }.toString()}")
 
         post.makers.filter { it.id != post.user.id }.forEach {
             users.add(User(it.id, it.name, it.headline, it.profileImage, UserType.MAKER))
