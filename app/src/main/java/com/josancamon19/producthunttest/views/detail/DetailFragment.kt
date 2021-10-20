@@ -5,22 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.apollographql.apollo.coroutines.await
 import com.bumptech.glide.Glide
 import com.josancamon19.producthunttest.PostDetailsQuery
 import com.josancamon19.producthunttest.databinding.FragmentDetailBinding
 import com.josancamon19.producthunttest.databinding.ListItemUserBinding
 import com.josancamon19.producthunttest.models.User
 import com.josancamon19.producthunttest.models.UserType
-import com.josancamon19.producthunttest.network.apolloClient
-import com.josancamon19.producthunttest.views.home.HomeFragmentDirections
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
     private val args: DetailFragmentArgs by navArgs()
+    private val viewModel: DetailViewModel by viewModels { Factory(args.postId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,10 +29,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
-        lifecycleScope.launchWhenResumed {
-            val response = apolloClient().query(PostDetailsQuery(args.postId)).await()
-            response.data?.post?.let { setupViews(it) }
-        }
+        viewLifecycleOwner.lifecycleScope.launch { viewModel.postDetails.collect { setupViews(it) } }
         return binding.root
     }
 
@@ -51,7 +49,6 @@ class DetailFragment : Fragment() {
         binding.btnGetIt.setOnClickListener { }
         binding.btnUpvote.setOnClickListener { }
         binding.btnTweetIt.setOnClickListener { }
-//        binding.tvFeaturedAt.text = post
         setupUsers(post)
     }
 
@@ -76,7 +73,7 @@ class DetailFragment : Fragment() {
             item.tvUserHeadline.text = it.headline
             item.tvUserType.text = it.type.toString()
 
-            item.root.setOnClickListener {_ ->
+            item.root.setOnClickListener { _ ->
                 val action = DetailFragmentDirections.actionDetailFragmentToProfileFragment(it.id)
                 Navigation.findNavController(binding.root).navigate(action)
             }
