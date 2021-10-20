@@ -1,0 +1,25 @@
+query UserVotedPosts($id:ID!, $after:String!) {
+    user(id: $id) {
+        votedPosts(after: $after) {
+            edges {
+                cursor
+                node {
+                    id
+                    name
+                    slug
+                    tagline
+                    description
+                    votesCount
+                    user {
+                        username
+                    }
+                    thumbnail {
+                        type
+                        url
+                        videoUrl
+                    }
+                }
+            }
+        }
+    }
+}

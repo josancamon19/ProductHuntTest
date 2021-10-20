@@ -6,17 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.apollographql.apollo.coroutines.await
 import com.bumptech.glide.Glide
 import com.josancamon19.producthunttest.UserDetailsQuery
+import com.josancamon19.producthunttest.adapters.PagedVotedPostsAdapter
 import com.josancamon19.producthunttest.databinding.FragmentProfileBinding
-import com.josancamon19.producthunttest.network.apolloClient
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val args: ProfileFragmentArgs by navArgs()
+    private lateinit var postsAdapter: PagedVotedPostsAdapter
+
+    private val viewModel: ProfileViewModel by viewModels { Factory(args.userId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,15 +30,26 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        lifecycleScope.launchWhenResumed {
-            val response = apolloClient().query(UserDetailsQuery(args.userId)).await()
-            response.data?.user?.let { setupViews(it) }
-        }
+        setupVotedPostsRecycler()
+        setupViewModel()
         return binding.root
     }
 
+    private fun setupViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.userDetails.collect { setupUserData(it) }
+            viewModel.flow.collectLatest { postsAdapter.submitData(it) }
+        }
+    }
+
+    private fun setupVotedPostsRecycler() {
+        postsAdapter = PagedVotedPostsAdapter()
+        binding.recyclerVotedPosts.setHasFixedSize(true)
+        binding.recyclerVotedPosts.adapter = postsAdapter
+    }
+
     @SuppressLint("SetTextI18n")
-    private fun setupViews(user: UserDetailsQuery.User) {
+    private fun setupUserData(user: UserDetailsQuery.User) {
         Glide.with(binding.root)
             .load(user.coverImage).centerCrop()
             .into(binding.ivProfileBanner)
@@ -41,10 +58,10 @@ class ProfileFragment : Fragment() {
             .load(user.profileImage).circleCrop()
             .into(binding.ivProfileImage)
 
-        binding.tvProfileName.text=  user.name
-        if (user.headline.isNullOrEmpty()){
+        binding.tvProfileName.text = user.name
+        if (user.headline.isNullOrEmpty()) {
             binding.tvProfileHeadline.visibility = View.GONE
-        }else binding.tvProfileHeadline.text = user.headline
+        } else binding.tvProfileHeadline.text = user.headline
         binding.tvProfileId.text = "#${user.id} ${user.username} ${user.headline}"
     }
 }
