@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Product Hunt"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.ProductHuntTest"
