@@ -8,16 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.josancamon19.producthunttest.UserDetailsQuery
+import com.josancamon19.producthunttest.UserVotedPostsQuery
 import com.josancamon19.producthunttest.adapters.PagedVotedPostsAdapter
 import com.josancamon19.producthunttest.databinding.FragmentProfileBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), PagedVotedPostsAdapter.OnPostClick {
     private lateinit var binding: FragmentProfileBinding
     private val args: ProfileFragmentArgs by navArgs()
     private lateinit var postsAdapter: PagedVotedPostsAdapter
@@ -43,7 +45,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupVotedPostsRecycler() {
-        postsAdapter = PagedVotedPostsAdapter()
+        postsAdapter = PagedVotedPostsAdapter(this)
         binding.recyclerVotedPosts.setHasFixedSize(true)
         binding.recyclerVotedPosts.adapter = postsAdapter
     }
@@ -59,9 +61,13 @@ class ProfileFragment : Fragment() {
             .into(binding.ivProfileImage)
 
         binding.tvProfileName.text = user.name
-        if (user.headline.isNullOrEmpty()) {
-            binding.tvProfileHeadline.visibility = View.GONE
-        } else binding.tvProfileHeadline.text = user.headline
+        if (user.headline.isNullOrEmpty()) binding.tvProfileHeadline.visibility = View.GONE
+        else binding.tvProfileHeadline.text = user.headline
         binding.tvProfileId.text = "#${user.id} ${user.username} ${user.headline}"
+    }
+
+    override fun setOnParamClick(post: UserVotedPostsQuery.Node) {
+        val action = ProfileFragmentDirections.actionProfileFragmentToDetailFragment(post.id)
+        Navigation.findNavController(binding.root).navigate(action)
     }
 }

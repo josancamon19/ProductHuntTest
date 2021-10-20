@@ -61,6 +61,7 @@ class PagedPostsAdapter(private val onPostClick: OnPostClick) :
 
             Glide.with(itemBinding.root)
                 .load(post.thumbnail?.url).centerCrop()
+                .placeholder(R.drawable.placeholder)
                 .into(itemBinding.ivThumbnail)
 
             itemBinding.root.setOnClickListener {
