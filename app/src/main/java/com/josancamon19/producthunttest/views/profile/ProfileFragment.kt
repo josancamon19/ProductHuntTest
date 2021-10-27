@@ -43,7 +43,11 @@ class ProfileFragment : Fragment(), PagedVotedPostsAdapter.OnPostClick {
     private fun setupViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.userDetails.collect { setupUserData(it) }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.votedPosts.collectLatest { postsAdapter.submitData(it) }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.usersFollowing.collectLatest { usersFollowingAdapter.submitData(it) }
         }
     }
