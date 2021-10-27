@@ -1,0 +1,15 @@
+query UsersFollowing($id:ID!, $after: String!) {
+    user(id: $id) {
+        following(after: $after) {
+            edges {
+                cursor
+                node {
+                    id
+                    name
+                    headline
+                    profileImage
+                }
+            }
+        }
+    }
+}

@@ -14,6 +14,7 @@ fun apolloClient(): ApolloClient {
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(AuthorizationInterceptor())
         .build()
+
     instance = ApolloClient.builder()
         .serverUrl("https://ph-graph-api-explorer.herokuapp.com/graphql")
         .okHttpClient(okHttpClient)

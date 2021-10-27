@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.josancamon19.producthunttest.UserDetailsQuery
 import com.josancamon19.producthunttest.UserVotedPostsQuery
+import com.josancamon19.producthunttest.adapters.PageUserFollowingAdapter
 import com.josancamon19.producthunttest.adapters.PagedVotedPostsAdapter
 import com.josancamon19.producthunttest.databinding.FragmentProfileBinding
 import kotlinx.coroutines.flow.collect
@@ -23,6 +24,7 @@ class ProfileFragment : Fragment(), PagedVotedPostsAdapter.OnPostClick {
     private lateinit var binding: FragmentProfileBinding
     private val args: ProfileFragmentArgs by navArgs()
     private lateinit var postsAdapter: PagedVotedPostsAdapter
+    private lateinit var usersFollowingAdapter: PageUserFollowingAdapter
 
     private val viewModel: ProfileViewModel by viewModels { Factory(args.userId) }
 
@@ -33,6 +35,7 @@ class ProfileFragment : Fragment(), PagedVotedPostsAdapter.OnPostClick {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         setupVotedPostsRecycler()
+        setupUsersFollowingRecycler()
         setupViewModel()
         return binding.root
     }
@@ -40,7 +43,8 @@ class ProfileFragment : Fragment(), PagedVotedPostsAdapter.OnPostClick {
     private fun setupViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.userDetails.collect { setupUserData(it) }
-            viewModel.flow.collectLatest { postsAdapter.submitData(it) }
+            viewModel.votedPosts.collectLatest { postsAdapter.submitData(it) }
+            viewModel.usersFollowing.collectLatest { usersFollowingAdapter.submitData(it) }
         }
     }
 
@@ -48,6 +52,12 @@ class ProfileFragment : Fragment(), PagedVotedPostsAdapter.OnPostClick {
         postsAdapter = PagedVotedPostsAdapter(this)
         binding.recyclerVotedPosts.setHasFixedSize(true)
         binding.recyclerVotedPosts.adapter = postsAdapter
+    }
+
+    private fun setupUsersFollowingRecycler() {
+        usersFollowingAdapter = PageUserFollowingAdapter()
+        binding.recyclerVotedPosts.setHasFixedSize(true)
+        binding.recyclerUsersFollowing.adapter = usersFollowingAdapter
     }
 
     @SuppressLint("SetTextI18n")

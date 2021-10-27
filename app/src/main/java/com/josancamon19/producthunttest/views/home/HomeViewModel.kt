@@ -6,13 +6,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.apollographql.apollo.coroutines.await
 import com.josancamon19.producthunttest.HomePostsQuery
+import com.josancamon19.producthunttest.UsersFollowingQuery
 import com.josancamon19.producthunttest.network.apolloClient
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val flow = Pager(PagingConfig(pageSize = 20, prefetchDistance = 3)) {
         PostsPagingSource()
     }.flow.cachedIn(viewModelScope)
-
 }
 
 class PostsPagingSource : PagingSource<String, HomePostsQuery.Edge>() {
